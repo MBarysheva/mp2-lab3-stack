@@ -27,10 +27,27 @@ TEST(TCalculator, can_get_the_result_of_expression)
     calc.ToPostfix();
     ASSERT_NO_THROW(calc.CalcPostfix());
 }
+///новый тест:
+TEST(TCalculator, can_get_the_result_of_long_expression)
+{
+    TCalculator calc;
+    calc.SetFormula("(2+1*9^(1/2))*5/(5+7*(15/3-3^2)-2)");
+    calc.ToPostfix();
+    ASSERT_NO_THROW(calc.CalcPostfix());
+}
+///проверка точности вычисления:
+TEST(TCalculator, check_of_the_result_of_long_expression)
+{
+    TCalculator calc;
+    calc.SetFormula(("(2+1*9^(1/2))*5/(5+7*(15/3-3^2)-2)"));
+    calc.ToPostfix();
+    EXPECT_EQ(-1, calc.CalcPostfix());
+}
+///
 TEST(Calculator, cannot_get_the_result_of_expression)
 {
     TCalculator calc;
-    string str = "+3+5";
+    string str = "/+3+5";
     calc.SetFormula(str);
     calc.ToPostfix();
     ASSERT_ANY_THROW(calc.CalcPostfix());
@@ -70,8 +87,8 @@ TEST(TCalculator, can_divide_numbers)
 TEST(TCalculator, can_pow_numbers)
 {
     TCalculator calc;
-    string str = "2^2";
+    string str = "3^2";
     calc.SetFormula(str);
     calc.ToPostfix();
-    EXPECT_EQ(4, calc.CalcPostfix());
+    EXPECT_EQ(9, calc.CalcPostfix());
 }

@@ -164,7 +164,7 @@ double  TCalculator::CalcPostfix()
 				case '/':
 					res = tmp2 / tmp1; st2.Push(res); break;
 				case '^':
-					res = pow(tmp1, tmp2); st2.Push(res); break;
+					res = pow(tmp2, tmp1); st2.Push(res); break;
 				default: if (formula[i] != ' ')
 					st2.Push(formula[i] - '0');
 					break;
