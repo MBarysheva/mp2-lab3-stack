@@ -6,10 +6,6 @@ TEST(Stack, can_create_stack_with_positive_length)
 {
 	ASSERT_NO_THROW(Stack <int> st(3));
 }
-TEST(TStack, can_create_stack_with_positive_length)
-{
-	ASSERT_NO_THROW(Stack<int> st(5));
-}
 TEST(TStack, can_create_stack_with_negativ_length)
 {
 	ASSERT_ANY_THROW(Stack<int>st(-1));
