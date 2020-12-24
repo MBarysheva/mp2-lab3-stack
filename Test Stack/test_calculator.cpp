@@ -27,23 +27,6 @@ TEST(TCalculator, can_get_the_result_of_expression)
     calc.ToPostfix();
     ASSERT_NO_THROW(calc.CalcPostfix());
 }
-///новый тест:
-TEST(TCalculator, can_get_the_result_of_long_expression)
-{
-    TCalculator calc;
-    calc.SetFormula("(2+1*9^(1/2))*5/(5+7*(15/3-3^2)-2)");
-    calc.ToPostfix();
-    ASSERT_NO_THROW(calc.CalcPostfix());
-}
-///проверка точности вычисления:
-TEST(TCalculator, check_of_the_result_of_long_expression)
-{
-    TCalculator calc;
-    calc.SetFormula(("(2+1*9^(1/2))*5/(5+7*(15/3-3^2)-2)"));
-    calc.ToPostfix();
-    EXPECT_EQ(-1, calc.CalcPostfix());
-}
-///
 TEST(Calculator, cannot_get_the_result_of_expression)
 {
     TCalculator calc;
@@ -51,6 +34,20 @@ TEST(Calculator, cannot_get_the_result_of_expression)
     calc.SetFormula(str);
     calc.ToPostfix();
     ASSERT_ANY_THROW(calc.CalcPostfix());
+}
+TEST(TCalculator, can_get_the_result_of_long_expression)
+{
+    TCalculator calc;
+    calc.SetFormula("(2+8)/(2^3)+(3^2)*4-8*7+9^(1/2)-5*2");
+    calc.ToPostfix();
+    ASSERT_NO_THROW(calc.CalcPostfix());
+}
+TEST(TCalculator, check_of_the_result_of_long_expression)
+{
+    TCalculator calc;
+    calc.SetFormula(("(2+8)/(2^3)+(3^2)*4-8*7+9^(1/2)-5*2"));
+    calc.ToPostfix();
+    EXPECT_EQ(-25.75, calc.CalcPostfix());
 }
 TEST(TCalculator, can_add_numbers)
 {

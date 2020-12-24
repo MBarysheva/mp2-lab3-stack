@@ -7,22 +7,31 @@ using namespace std;
 void TCalculator::SetFormula(string str)
 {
 	infix = " ";
-	for (int i = 0; i < str.size(); i++)
+	for (unsigned int i = 0; i < str.size(); i++)
 	{
-		if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^')
+		if (str[i] == 's' || str[i] == 'c' || str[i] == 'e' || str[i] == 'l')
 		{
 			infix += " ";
+			infix += str[i];
+			i += 3;
+			if (i >= str.size() - 2)
+				throw 0;
 		}
-		infix += str[i];
+		else
+		{
+			if (Priority(str[i]) != 0)
+			{
+				infix += " ";
+			}
+			infix += str[i];
+		}
+
 	}
-	if (!CheckBrackets())
+	infix += ' ';
+	if (CheckBrackets() != true)
 	{
 		throw 0;
 	}
-	Stack<char> s(infix.size());
-	Stack<double> d(infix.size());
-	st = s;
-	st2 = d;
 }
 
 bool TCalculator::CheckBrackets()
