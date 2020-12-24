@@ -35,7 +35,7 @@ TEST(Calculator, cannot_get_the_result_of_expression)
     calc.ToPostfix();
     ASSERT_ANY_THROW(calc.CalcPostfix());
 }
-TEST(TCalculator, can_get_the_result_of_long_expression)
+TEST(TCalculator, can_get_the_result_of_long_expression)//длинное выражение
 {
     TCalculator calc;
     calc.SetFormula("(2+8)/(2^3)+(3^2)*4-8*7+9^(1/2)-5*2");
