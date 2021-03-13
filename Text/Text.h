@@ -1,4 +1,5 @@
 #pragma once
+#define maxlendht=80
 #include <iostream>
 #include <cstdlib>
 #include "../stack/Stack.h"
@@ -7,6 +8,7 @@ class TTextLink
 public:
 	TTextLink* pNext, * pDown;
 	char str[80];
+	int maxlenght;
 	TTextLink(char* s = NULL, TTextLink* pn = NULL, TTextLink* pd = NULL)
 	{
 		pNext = pn;
@@ -22,6 +24,7 @@ public:
 class TText {
 	TTextLink* pFirst, * pCurr;
 	Stack<TTextLink*> st;
+	int level;
 public:
 	void GoFirstLink() {
 		pCurr = pFirst;
@@ -77,5 +80,78 @@ public:
 			pCurr->pDown = t->pNext;
 			delete t;
 		}
+	}
+	void Print()
+	{
+		level = 0;
+		PrintRec(pFirst);
+	}
+	void PrintRec(TTextLink* t)
+	{
+		if (t != NULL)
+			for (int i = 0; i < level; i++)
+				std::cout << ' ';
+		std::cout << t->str << '\n';
+		level++;
+		PrintRec(t->pDown);
+		level--;
+		PrintRec(t->pNext);
+	}
+	void Save(char* name)
+	{
+		ofstream ofs(name);
+		SaveRec(pFirst, ofs);
+		ofs.close();
+	}
+	void SaveRec(TTextLink* t, ofstream& ost)
+	{
+		if (t != NULL)
+		{
+			ofs << t->str << endl;
+			if (t->pDown != NULL)
+			{
+				ofs << ' l ' << endl;
+				SaveRec(t->pDown, ofs);
+				ofs << '}' << endl;
+			}
+			if (t->pNext != NULL)
+			{
+				SaveRec(t->pNext, ofs);
+			}
+		}
+	}
+	void Read(char* fn)
+	{
+		ifstream ifs(fn);
+		pFirst = ReadRec(ifs);
+		ifs.close();
+	}
+	TTextLink* ReadRec(ifstream& ifs)
+	{
+		TTextLink* pf = NULL, * pc = NULL;
+		char Buff[maxlenght];
+		while (ifs.eof() == 0)
+		{
+			ifs.getline(Buff, maxlenght, '\n');
+			if (Buff[0] == '}')
+			{
+				break;
+			}
+			if (Buff[0] == '{')
+			{
+				pc->pDown = ReadRec(ifs);
+			}
+			if (pc == NULL)
+			{
+				TTextLink* tmp = new TTextLink(Buff);
+				pf = pc = tmp;
+			}
+			else
+			{
+				TTextLink* tmp = new TTextLink(Buff);
+				pc->pNext = tmp;
+			}
+		}
+		return pf;
 	}
 };
