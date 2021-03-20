@@ -154,4 +154,40 @@ public:
 		}
 		return pf;
 	}
+	void Reset()
+	{
+		if (pFirst)
+		{
+			st.Clear();
+			pCurr = pFirst;
+			st.Push(pFirst);
+			if (pFirst->pNext)
+			{
+				st.Push(pFirst->pNext);
+			}
+			if (pFirst->pDown)
+			{
+				st.Push(pFirst->pDown);
+			}
+		}
+
+	}
+
+	void GoNext()
+	{
+		pCurr = st.Pop();
+		if(pCurr!=pFirst)
+			if (pCurr->pNext)
+			{
+				st.Push(pCurr->pNext);
+			}
+		if (pCurr->pDown)
+		{
+			st.Push(pCurr->pDown);
+		}
+	}
+	bool IsEnd()
+	{
+		return st.Empty();
+	}
 };
