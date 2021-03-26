@@ -1,14 +1,14 @@
-#pragma once
-#define maxlendht=80
+#pragma warning(disable : 4996)
 #include <iostream>
-#include <cstdlib>
+#include <fstream>
 #include "../stack/Stack.h"
+using namespace std;
+const int maxlenght = 200;
 class TTextLink
 {
 public:
 	TTextLink* pNext, * pDown;
-	char str[80];
-	int maxlenght;
+	char str[200];
 	TTextLink(char* s = NULL, TTextLink* pn = NULL, TTextLink* pd = NULL)
 	{
 		pNext = pn;
@@ -19,13 +19,21 @@ public:
 		}
 		else str[0] = '\0';
 	}
-	~TTextLink();
+	~TTextLink() {};
 };
 class TText {
 	TTextLink* pFirst, * pCurr;
 	Stack<TTextLink*> st;
 	int level;
 public:
+	TText(TTextLink* pf = NULL)
+	{
+		if (!pf) pf = new TTextLink;
+
+		pFirst = pf;
+		pCurr = pFirst;
+	}
+	~TText() {};
 	void GoFirstLink() {
 		pCurr = pFirst;
 		st.Clear();
@@ -47,25 +55,43 @@ public:
 	}
 	void InsNextLine(char* s)
 	{
-		TTextLink* t;
-		t = new TTextLink(s, pCurr->pNext);
-		pCurr->pNext = t;
+		if (pCurr != NULL)
+		{
+			TTextLink* t;
+			t = new TTextLink(s, pCurr->pNext, NULL);
+			pCurr->pNext = t;
+		}
+	}
+	void InsDownLine(char* s)
+	{
+		if (pCurr != NULL)
+		{
+			TTextLink* t;
+			t = new TTextLink(s, pCurr->pDown, NULL);
+			pCurr->pDown = t;
+		}
 	}
 	void InsNextSection(char* s)
 	{
-		TTextLink* t;
-		t = new TTextLink(s, NULL, pCurr->pNext);
+		if (pCurr != NULL)
+		{
+			TTextLink* t;
+			t = new TTextLink(s, NULL, pCurr->pNext);
 			pCurr->pNext = t;
+		}
 	}
 	void InsDownSection(char *s)
 	{
-		TTextLink* t;
-		t = new TTextLink(s, NULL, pCurr->pDown);
-		pCurr->pDown = t;
+		if (pCurr->pNext != NULL)
+		{
+			TTextLink* t;
+			t = new TTextLink(s, NULL, pCurr->pDown);
+			pCurr->pDown = t;
+		}
 	}
 	void DelNextLine()
 	{
-		if (pCurr->pNext)
+		if (pCurr->pNext!=NULL)
 		{
 			TTextLink* t = pCurr->pNext;
 			pCurr->pNext = t ->pNext;
@@ -74,7 +100,7 @@ public:
 	}
 	void DelDownLine()
 	{
-		if (pCurr->pDown)
+		if (pCurr->pDown!=NULL)
 		{
 			TTextLink* t = pCurr->pDown;
 			pCurr->pDown = t->pNext;
@@ -90,8 +116,8 @@ public:
 	{
 		if (t != NULL)
 			for (int i = 0; i < level; i++)
-				std::cout << ' ';
-		std::cout << t->str << '\n';
+				cout << ' ';
+		cout << t->str << '\n';
 		level++;
 		PrintRec(t->pDown);
 		level--;
@@ -103,14 +129,14 @@ public:
 		SaveRec(pFirst, ofs);
 		ofs.close();
 	}
-	void SaveRec(TTextLink* t, ofstream& ost)
+	void SaveRec(TTextLink* t, ofstream& ofs)
 	{
 		if (t != NULL)
 		{
 			ofs << t->str << endl;
 			if (t->pDown != NULL)
 			{
-				ofs << ' l ' << endl;
+				ofs << ' { ' << endl;
 				SaveRec(t->pDown, ofs);
 				ofs << '}' << endl;
 			}
@@ -172,18 +198,20 @@ public:
 		}
 
 	}
-
 	void GoNext()
 	{
-		pCurr = st.Pop();
-		if(pCurr!=pFirst)
-			if (pCurr->pNext)
-			{
-				st.Push(pCurr->pNext);
-			}
-		if (pCurr->pDown)
+		if (!IsEnd())
 		{
-			st.Push(pCurr->pDown);
+			pCurr = st.Pop();
+			if (pCurr != pFirst)
+				if (pCurr->pNext)
+				{
+					st.Push(pCurr->pNext);
+				}
+			if (pCurr->pDown)
+			{
+				st.Push(pCurr->pDown);
+			}
 		}
 	}
 	bool IsEnd()

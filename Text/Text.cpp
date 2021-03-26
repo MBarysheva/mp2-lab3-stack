@@ -1,11 +1,16 @@
 #pragma once
-#include <iostream>
-#include <cstdlib>
 #include "../stack/Stack.h"
 #include "Text.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+using namespace std;
 int main()
 {
 	TText t;
-	t.Read("Text.txt");
+	char NameofFile[200], s[200];
+	cout << "Your name of file: " << endl;
+	cin >> NameofFile;
+	t.Read(NameofFile);
 	t.Print();
 }
